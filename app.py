@@ -1,7 +1,7 @@
 # Importa os módulos necessários do Flask e outras bibliotecas
 import os
 from dotenv import load_dotenv
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, Response, render_template, request, stream_with_context
 load_dotenv()
 import google.generativeai as genai  # biblioteca da API do Gemini
 import traceback  # para exibir erros detalhados no terminal
@@ -100,30 +100,26 @@ historico_chat = []
 
 
 def responder_avancado(pergunta):
+    """Gera a resposta do chatbot em modo streaming."""
     try:
-        # Mostra a pergunta no terminal (debug)
         print(f"\n📨 Pergunta: {pergunta[:100]}")
-
-        # Junta o prompt do sistema com a pergunta feita pelo usuário
         mensagem = f"{sistema_prompt}\n\nPergunta do usuário: {pergunta}"
 
-        # Verifica se a mensagem não está muito grande (limite da API)
         if len(mensagem) > 100000:
-            return "Desculpe, a base está muito grande. Contate o administrador."
+            yield "Desculpe, a base está muito grande. Contate o administrador."
+            return
 
-        # Envia a mensagem para o modelo e recebe a resposta
-        response = model.generate_content(mensagem)
-        resposta = response.text.strip()
+        # Gera a resposta em streaming
+        response = model.generate_content(mensagem, stream=True)
 
-        # Armazena no histórico (opcional)
-        historico_chat.append({"usuario": pergunta, "assistente": resposta})
-
-        # Retorna o texto de resposta para o front-end
-        return resposta
+        # Itera sobre os chunks da resposta e envia para o front-end
+        for chunk in response:
+            if chunk.text:
+                yield chunk.text
 
     except Exception:
         print("❌ ERRO:", traceback.format_exc())
-        return "Erro ao processar a pergunta."
+        yield "Erro ao processar a pergunta."
 
 
 # =======================
@@ -140,15 +136,24 @@ def home():
     return render_template('home.html')
 
 
-@app.route('/assistente', methods=['GET', 'POST'])
+@app.route('/assistente')
 def assistente():
-    resposta = ""
-    pergunta = ""
-    if request.method == 'POST':
-        pergunta = request.form.get('mensagem', '').strip()
-        if pergunta:
-            resposta = responder_avancado(pergunta)
-    return render_template('assistente.html', resposta=resposta, pergunta=pergunta)
+    return render_template('assistente.html')
+
+
+@app.route('/stream')
+def stream():
+    pergunta = request.args.get('mensagem', '').strip()
+    if not pergunta:
+        return Response("Nenhuma pergunta fornecida.", status=400)
+
+    # Usa um gerador para enviar a resposta em partes (streaming)
+    def generate():
+        for chunk in responder_avancado(pergunta):
+            yield f"data: {chunk}\n\n"
+
+    # Retorna a resposta como um evento de stream
+    return Response(stream_with_context(generate()), mimetype='text/event-stream')
 
 
 # =======================

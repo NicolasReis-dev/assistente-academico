@@ -10,3 +10,6 @@ __pycache__/
 
 # Configurações do VSCode
 .vscode/
+
+# Arquivos de log
+server_output.log
