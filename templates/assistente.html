@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UN!A - Chat</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/assistente.css') }}">
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <div class="header-avatar">A</div>
+            <div class="header-info">
+                <h2>UN!A</h2>
+                <div class="header-status">
+                    <span class="status-dot"></span>
+                    Online - Pronta para ajudar
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            {% if not pergunta and not resposta %}
+            <div class="welcome-message">
+                <div class="icon">A</div>
+                <h3>Olá! Sou a UN!A</h3>
+                <p>Como posso ajudar você hoje? Pergunte sobre calendário acadêmico, cursos, eventos ou qualquer dúvida!</p>
+            </div>
+            {% endif %}
+
+            {% if pergunta %}
+            <div class="message user">
+                <div class="message-label">
+                    <span class="message-icon">U</span>
+                    Você
+                </div>
+                <div class="message-content">{{ pergunta }}</div>
+            </div>
+            {% endif %}
+
+            {% if resposta %}
+            <div class="message assistant">
+                <div class="message-label">
+                    <span class="message-icon">A</span>
+                    UN!A
+                </div>
+                <div class="message-content">{{ resposta }}</div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="chat-input-area">
+            <form method="POST" action="/assistente" class="input-form">
+                <div class="input-wrapper">
+                    <textarea 
+                        name="mensagem" 
+                        placeholder="Digite sua pergunta aqui..."
+                        required
+                        rows="1"
+                        id="messageInput"
+                    ></textarea>
+                </div>
+                <button type="submit" class="btn-send">Enviar</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/assistente.js') }}"></script>
+</body>
+</html>

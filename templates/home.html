@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UN!A - Início</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+</head>
+<body>
+    <div class="home-container">
+        <div class="floating-shapes">
+            <div class="shape"></div>
+            <div class="shape"></div>
+            <div class="shape"></div>
+        </div>
+
+        <div class="logo-large">UN!A</div>
+        <h1>Sua Assistente Acadêmica Inteligente</h1>
+        <p class="description">
+            Olá! Eu sou a UN!A, sua assistente virtual da UniEVANGÉLICA. 
+            Estou aqui para ajudar você com informações acadêmicas, calendário de aulas, 
+            dúvidas sobre cursos e muito mais. Vamos começar?
+        </p>
+
+        <div class="user-info">
+            <div class="info-item">
+                <span class="info-label">Nome:</span>
+                <span class="info-value">{{ request.args.get('nome', 'Usuário') }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Matrícula:</span>
+                <span class="info-value">{{ request.args.get('matricula', '---') }}</span>
+            </div>
+        </div>
+
+        <a href="/assistente" class="btn-chat">Conversar com UN!A</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,12 @@
+# Ambiente Virtual do Python
+venv/
+
+# Arquivo de "Cofre" com segredos
+.env
+
+# Arquivos temporários do Python
+__pycache__/
+*.pyc
+
+# Configurações do VSCode
+.vscode/
