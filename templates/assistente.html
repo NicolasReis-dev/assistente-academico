@@ -20,33 +20,11 @@
         </div>
 
         <div class="chat-messages" id="chatMessages">
-            {% if not pergunta and not resposta %}
             <div class="welcome-message">
                 <div class="icon">A</div>
                 <h3>Olá! Sou a UN!A</h3>
                 <p>Como posso ajudar você hoje? Pergunte sobre calendário acadêmico, cursos, eventos ou qualquer dúvida!</p>
             </div>
-            {% endif %}
-
-            {% if pergunta %}
-            <div class="message user">
-                <div class="message-label">
-                    <span class="message-icon">U</span>
-                    Você
-                </div>
-                <div class="message-content">{{ pergunta }}</div>
-            </div>
-            {% endif %}
-
-            {% if resposta %}
-            <div class="message assistant">
-                <div class="message-label">
-                    <span class="message-icon">A</span>
-                    UN!A
-                </div>
-                <div class="message-content">{{ resposta }}</div>
-            </div>
-            {% endif %}
         </div>
 
         <div class="chat-input-area">
