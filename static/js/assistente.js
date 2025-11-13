@@ -59,20 +59,25 @@ document.addEventListener('DOMContentLoaded', function() {
         textarea.value = '';
         textarea.style.height = 'auto';
 
+        // --- CORREÇÃO AQUI ---
         // Display assistant placeholder
         const assistantMessageDiv = document.createElement('div');
         assistantMessageDiv.className = 'message assistant';
+        
+        // Note que removi o id="assistantResponse" daqui para não duplicar
         assistantMessageDiv.innerHTML = `
             <div class="message-label">
                 <span class="message-icon">A</span>
                 UN!A
             </div>
-            <div class="message-content" id="assistantResponse"></div>
+            <div class="message-content"></div>
         `;
         chatMessages.appendChild(assistantMessageDiv);
         scrollToBottom();
 
-        const assistantResponse = document.getElementById('assistantResponse');
+        // EM VEZ DE BUSCAR PELO ID, BUSCAMOS DENTRO DA DIV NOVA
+        // Isso garante que estamos mexendo apenas na resposta ATUAL
+        const assistantResponse = assistantMessageDiv.querySelector('.message-content');
 
         // Connect to stream
         const eventSource = new EventSource(`/stream?mensagem=${encodeURIComponent(userMessage)}`);
@@ -85,9 +90,15 @@ document.addEventListener('DOMContentLoaded', function() {
             scrollToBottom();
         };
 
+        // --- SUA CORREÇÃO DO ERRO ESTÁ AQUI ---
         eventSource.onerror = function(err) {
             console.error('EventSource failed:', err);
-            assistantResponse.innerHTML += '<br>Erro ao carregar a resposta.';
+            
+            // Lógica perfeita: só reclama se não tiver escrito nada ainda
+            if (assistantResponse.innerHTML.trim() === "") {
+                assistantResponse.innerHTML += '<br>Erro ao carregar a resposta.';
+            }
+            
             eventSource.close();
             scrollToBottom();
         };
