@@ -42,3 +42,41 @@ Equipe de Desenvolvimento
 | **YOUSSEF PORTO**         | Banco de Dados        |
 | **JOÃO GABRIEL NERES**    | Banco de Dados        |
 | **JOÃO VITOR FREITAS**    | Front-end             |
+
+Estrutura do Repositório
+
+assistente-academico/
+│── static/ # Arquivos estáticos (CSS, JS)
+│── templates/ # Arquivos HTML de interface
+│── app.py # Código-fonte principal da aplicação Flask
+│── dados_academicos.txt # Arquivo de persistência de dados simples
+│── requirements.txt # Lista de dependências Python
+│── README.md # Este arquivo
+
+## Como Rodar o Projeto Localmente
+
+Siga o passo a passo abaixo para executar o UN!A – Assistente Acadêmico no seu computador.
+
+1) Baixe o projeto:
+   - Acesse o repositório: https://github.com/NicolasReis-dev/assistente-academico
+   - Clique no botão "Code" (verde)
+   - Selecione "Download ZIP"
+   - Extraia o arquivo ZIP em uma pasta do seu computador
+
+2) Verifique o Python instalado:
+   python --version
+
+3) Instale as dependências necessárias:
+   pip install python-dotenv
+   pip install google-generativeai
+   pip install flask
+
+4) Execute a aplicação:
+   python app.py
+   (ou python3 app.py dependendo da sua instalação)
+
+5) Acesse no navegador:
+   http://127.0.0.1:500
+
+Pronto! O UN!A estará rodando localmente no seu navegador.
+
